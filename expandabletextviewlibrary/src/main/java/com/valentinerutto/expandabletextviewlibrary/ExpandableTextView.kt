@@ -2,11 +2,13 @@ package com.valentinerutto.expandabletextviewlibrary
 
 import android.content.Context
 import android.graphics.Color
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 class ExpandableTextView : TextView {
     private val DEFAULT_TRIM_LENGTH = 50
@@ -52,7 +54,12 @@ class ExpandableTextView : TextView {
 
     private fun getTrimmedText(text: CharSequence?): CharSequence? {
         return if (originalText != null && originalText!!.length > trimLength) {
-            SpannableStringBuilder(originalText, 0, trimLength + 1).append(ELLIPSIS)
+            val spanString = SpannableString(ELLIPSIS)
+            spanString.setSpan(
+                ForegroundColorSpan(ContextCompat.getColor(context,R.color.colorAccent)),
+                0, spanString.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            SpannableStringBuilder(originalText, 0, trimLength + 1).append(spanString)
         } else {
             originalText
         }
